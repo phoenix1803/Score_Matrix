@@ -13,13 +13,10 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-let app;
-let auth: Auth | undefined; // ✅ Explicitly type
+let app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-if (typeof window !== "undefined") {
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-  auth = getAuth(app);
-}
+// ✅ This works even with SSR, and TypeScript is happy
+const auth: Auth = getAuth(app);
 
 export { auth };
 export default app;
