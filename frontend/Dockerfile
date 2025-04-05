@@ -8,5 +8,6 @@ RUN npm install --legacy-peer-deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt 
 COPY . .
+RUN npm run build
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
