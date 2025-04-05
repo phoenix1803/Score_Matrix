@@ -1,0 +1,8 @@
+google-generativeai
+nltk
+pandas
+python-docx
+numpy
+scikit-learn
+pdf2image
+Pillow  
