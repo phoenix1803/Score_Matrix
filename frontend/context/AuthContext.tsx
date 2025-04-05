@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../lib/firebase.config";
+import type { Auth } from "firebase/auth"; // Add this line
+
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -31,7 +33,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Only run auth state changes on client side
     if (typeof window !== 'undefined') {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const unsubscribe = onAuthStateChanged(auth!, (currentUser) => {
         setUser(currentUser);
         setLoading(false);
       });
@@ -43,20 +45,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    await signInWithEmailAndPassword(auth!, email, password);
   };
 
   const signup = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password);
+    await createUserWithEmailAndPassword(auth!, email, password);
   };
 
   const logout = async () => {
-    await signOut(auth);
+    await signOut(auth!);
   };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    await signInWithPopup(auth!, provider);
   };
 
   return (
