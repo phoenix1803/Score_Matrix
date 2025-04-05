@@ -4,6 +4,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import Link from "next/link";
+export const dynamic = 'force-dynamic';
 
 const SettingsPage = () => {
   const [settings, setSettings] = useState({

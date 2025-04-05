@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useAnimation, } from "framer-motion";
 import Image from "next/image";
+export const dynamic = 'force-dynamic';
 
 interface SectionRefs {
   [key: string]: HTMLElement | null;

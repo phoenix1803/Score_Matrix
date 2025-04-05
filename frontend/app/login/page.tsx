@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { User } from "firebase/auth"; // Import User type
+export const dynamic = 'force-dynamic';
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);

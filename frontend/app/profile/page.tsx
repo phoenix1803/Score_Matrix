@@ -3,6 +3,7 @@
 import React from 'react';
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+export const dynamic = 'force-dynamic';
 
 const ProfilePage = () => {
   const [user] = useState({
