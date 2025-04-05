@@ -29,21 +29,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    // Only run auth state changes on client side
+    if (typeof window !== 'undefined') {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        setLoading(false);
+      });
+
+      return () => unsubscribe();
+    } else {
       setLoading(false);
-    });
-
-    const handleTabClose = () => {
-      signOut(auth);
-    };
-
-    window.addEventListener("beforeunload", handleTabClose);
-
-    return () => {
-      unsubscribe();
-      window.removeEventListener("beforeunload", handleTabClose);
-    };
+    }
   }, []);
 
   const login = async (email: string, password: string) => {

@@ -5,21 +5,16 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
-  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    if (user === null) {
-      // Not logged in, redirect to login
+    if (!loading && user === null) {
       router.replace("/login");
-    } else if (user !== undefined) {
-      // Logged in or still checking
-      setCheckingAuth(false);
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
-  if (checkingAuth) {
+  if (loading || user === null) {
     return <div>Loading...</div>;
   }
 
