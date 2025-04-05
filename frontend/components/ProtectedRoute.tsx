@@ -1,30 +1,27 @@
 "use client";
 
-import React from 'react';
-import { useAuth } from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    // Wait for user to be initialized
-    if (user !== null) {
-      setLoading(false);
-      if (!user) {
-        router.replace("/");
-      }
+    if (user === null) {
+      // Not logged in, redirect to login
+      router.replace("/login");
+    } else if (user !== undefined) {
+      // Logged in or still checking
+      setCheckingAuth(false);
     }
   }, [user, router]);
 
-  if (loading) {
-    return <div>Loading...</div>; // Show a loading spinner or placeholder
+  if (checkingAuth) {
+    return <div>Loading...</div>;
   }
-
-  if (!user) return null;
 
   return <>{children}</>;
 };

@@ -319,7 +319,7 @@ const HomePage = () => {
             >
               <div className="bg-white p-6 rounded-2xl shadow-xl">
                 <Image
-                  src="/qr.jpg" // Replace with your actual QR code image path
+                  src="/qr.jpg"
                   alt="ScoreMatrix App QR Code"
                   width={200}
                   height={200}

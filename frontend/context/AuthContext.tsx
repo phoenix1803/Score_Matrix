@@ -1,8 +1,6 @@
 "use client";
 
-import React from 'react';
-import { createContext, useContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../lib/firebase.config";
 import {
   onAuthStateChanged,
@@ -16,25 +14,24 @@ import {
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  setUser: (user: User | null) => void; // Add this
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      if (!currentUser) {
-        router.push("/login");
-      }
+      setLoading(false);
     });
 
     const handleTabClose = () => {
@@ -47,7 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       unsubscribe();
       window.removeEventListener("beforeunload", handleTabClose);
     };
-  }, [router]);
+  }, []);
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
@@ -59,7 +56,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     await signOut(auth);
-    router.push("/login");
   };
 
   const signInWithGoogle = async () => {
@@ -68,7 +64,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, signInWithGoogle, setUser }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, signup, logout, signInWithGoogle, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
